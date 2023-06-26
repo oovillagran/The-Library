@@ -32,14 +32,15 @@ end
 require_relative 'student'
 require_relative 'teacher'
 
-student = Student.new("John Doe", 16, true, "Class A")
-puts student.name # Output: John Doe
+student = Student.new("Juan Duvalt", 17, true, "Class 101")
+puts student.name
 puts student.id
-puts student.age # Output: 16
-puts student.play_hooky # Output: ¯\(ツ)/¯
-puts student.can_use_services? # Output: true
+puts student.age
+puts student.play_hooky
+puts student.can_use_services?
 
-teacher = Teacher.new("Jane Smith", 35, true, "Mathematics")
-puts teacher.name # Output: Jane Smith
-puts teacher.age # Output: 35
-puts teacher.can_use_services? # Output: true
+teacher = Teacher.new("Teresa Hold", 40, true, "Science")
+puts teacher.name
+puts teacher.age
+puts teacher.id
+puts teacher.can_use_services?
