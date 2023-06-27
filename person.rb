@@ -1,4 +1,10 @@
-class Person
+class Nameable
+  def correct_name
+    raise NotImplementedError, 'Subclasses must implement the correct_name method'
+  end
+end
+
+class Person < Nameable
   attr_accessor :name, :age
   attr_reader :id
 
@@ -7,6 +13,7 @@ class Person
     @name = name
     @age = age
     @parent_permission = parent_permission
+    super()
   end
 
   def generate_id
@@ -17,6 +24,10 @@ class Person
     of_age? || @parent_permission
   end
 
+  def correct_name
+    @name
+  end
+
   private
 
   def of_age?
@@ -24,18 +35,36 @@ class Person
   end
 end
 
+class Decorator < Nameable
+  def initialize(nameable)
+    @nameable = nameable
+    super()
+  end
+
+  def correct_name
+    @nameable.correct_name
+  end
+end
+
+class CapitalizeDecorator < Decorator
+  def correct_name
+    @nameable.correct_name.capitalize
+  end
+end
+
+class TrimmerDecorator < Decorator
+  def correct_name
+    name = @nameable.correct_name
+    name.length > 10 ? name[0..9] : name
+  end
+end
+
 require_relative 'student'
 require_relative 'teacher'
 
-student = Student.new(17, 'Class 101', 'Juan Duvalt', parent_permission: true)
-puts student.name
-puts student.id
-puts student.age
-puts student.play_hooky
-puts student.can_use_services?
-
-teacher = Teacher.new(40, 'Science', 'Teresa Hold', parent_permission: true)
-puts teacher.name
-puts teacher.age
-puts teacher.id
-puts teacher.can_use_services?
+person = Person.new(22, 'maximilianus')
+person.correct_name
+capitalized_person = CapitalizeDecorator.new(person)
+puts capitalized_person.correct_name
+capitalized_trimmed_persn = TrimmerDecorator.new(capitalized_person)
+puts capitalized_trimmed_persn.correct_name
