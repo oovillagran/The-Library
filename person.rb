@@ -13,6 +13,7 @@ class Person < Nameable
     @name = name
     @age = age
     @parent_permission = parent_permission
+    super()
   end
 
   def generate_id
@@ -37,6 +38,7 @@ end
 class Decorator < Nameable
   def initialize(nameable)
     @nameable = nameable
+    super()
   end
 
   def correct_name
@@ -50,13 +52,12 @@ class CapitalizeDecorator < Decorator
   end
 end
 
-class TrimmerDecorator  < Decorator
+class TrimmerDecorator < Decorator
   def correct_name
     name = @nameable.correct_name
     name.length > 10 ? name[0..9] : name
   end
 end
-
 
 require_relative 'student'
 require_relative 'teacher'
