@@ -1,45 +1,40 @@
 class Person
-  attr_reader :id, :name, :age, :parent_permission
+  attr_accessor :name, :age
+  attr_reader :id
 
-  def initialize(name = 'Unknown', age = nil, parent_permission = true)
+  def initialize(age, name = 'Unknown', parent_permission: true)
     @id = generate_id
     @name = name
     @age = age
     @parent_permission = parent_permission
   end
 
-  def name=(new_name)
-    @name = new_name
-  end
-
-  def age=(new_age)
-    @age = new_age
+  def generate_id
+    @id = Random.rand(1..1000)
   end
 
   def can_use_services?
-    of_age? || parent_permission
+    of_age? || @parent_permission
   end
+
+  private
 
   def of_age?
     @age.to_i >= 18
-  end
-
-  def generate_id
-    @id = Random.rand(1..1000)
   end
 end
 
 require_relative 'student'
 require_relative 'teacher'
 
-student = Student.new("Juan Duvalt", 17, true, "Class 101")
+student = Student.new(17, 'Class 101', 'Juan Duvalt', parent_permission: true)
 puts student.name
 puts student.id
 puts student.age
 puts student.play_hooky
 puts student.can_use_services?
 
-teacher = Teacher.new("Teresa Hold", 40, true, "Science")
+teacher = Teacher.new(40, 'Science', 'Teresa Hold', parent_permission: true)
 puts teacher.name
 puts teacher.age
 puts teacher.id

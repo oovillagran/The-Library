@@ -1,11 +1,11 @@
 class Student < Person
-  def initialize(name = 'Unknown', age = nil, parent_permission = true, classroom)
-    super(name, age)
+  def initialize(age, classroom, name = 'Unknown', parent_permission: true)
+    super(age, name, parent_permission: parent_permission)
     @parent_permission = parent_permission
     @classroom = classroom
   end
-  
+
   def play_hooky
-    "¯\(ツ)/¯"
+    '¯(ツ)/¯'
   end
 end
