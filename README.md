@@ -130,7 +130,13 @@ To run tests, execute the following command:
 
 ## 🔭 Future Features <a name="future-features"></a>
 
-- [ ] **Get morse code from a normal message**
+- [ ] **Users Authentication**
+- [ ] **Setup associations**
+- [ ] **Add basic UI**
+- [ ] **Code Refactor**
+- [ ] **Preserve data**
+- [ ] **Preserve data**
+- [ ] **Unit Tests**
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
