@@ -1,6 +1,3 @@
-require_relative 'classroom'
-require_relative 'student'
-
 class Nameable
   def correct_name
     raise NotImplementedError, 'Subclasses must implement the correct_name method'
@@ -62,12 +59,3 @@ class TrimmerDecorator < Decorator
     name.length > 10 ? name[0..9] : name
   end
 end
-
-require_relative 'teacher'
-
-person = Person.new(22, 'maximilianus')
-person.correct_name
-capitalized_person = CapitalizeDecorator.new(person)
-puts capitalized_person.correct_name
-capitalized_trimmed_persn = TrimmerDecorator.new(capitalized_person)
-puts capitalized_trimmed_persn.correct_name

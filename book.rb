@@ -12,11 +12,3 @@ class Book
     @rentals
   end
 end
-
-book = Book.new("The Great Gatsby", "F. Scott Fitzgerald")
-puts book.title
-puts book.author
-book.title = "To Kill a Mockingbird"
-book.author = "Harper Lee"
-puts book.title
-puts book.author
