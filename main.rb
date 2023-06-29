@@ -48,6 +48,11 @@ puts "Age: #{student.age}"
 puts "Can use services? #{student.can_use_services?}"
 puts "Classroom: #{student.classroom.label}"
 puts "Play hooky: #{student.play_hooky}"
+puts "Student's Classroom: #{student.classroom.label}"
+puts 'Students in the Classroom:'
+classroom.students.each do |student|
+puts "- #{student.name}"
+end
 puts
 
 # Rental
