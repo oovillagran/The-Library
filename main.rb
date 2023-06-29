@@ -60,6 +60,8 @@ puts
 
 # Student
 student = Student.new(16, classroom, 'Kilian')
+student_1 = Student.new(12, classroom, 'Amy')
+student_2 = Student.new(15, classroom, 'Rachel')
 puts 'Student:'
 puts "Name: #{student.correct_name}"
 puts "Age: #{student.age}"
