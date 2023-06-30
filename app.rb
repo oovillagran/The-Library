@@ -133,7 +133,9 @@ class App
     rentals = @rentals.select { |rental| rental.person === person }
 
     if rentals.empty?
+      puts "Rentals:"
       puts "No rentals found for person with ID #{person_id}."
+      puts
       return
     end
 
