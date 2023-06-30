@@ -1,3 +1,4 @@
+require 'date'
 require_relative 'person'
 require_relative 'book'
 require_relative 'classroom'
@@ -15,13 +16,20 @@ class App
   end
 
   def list_of_books
-    @books.each { |book| puts "Title: #{book.title}, Author: #{book.author}" }
+    @books.each { |book| puts "Title: '#{book.title}', Author: #{book.author}" }
     puts
   end
   
-  # def list_of_people
-  
-  # end
+  def list_of_people
+    @people.each do |person|
+      person_type = person.is_a?(Student) ? 'Student' : 'Teacher'
+      print "[#{person_type}] "
+      print "Name: #{person.name} "
+      print "ID: #{person.id} "
+      print "Age: #{person.age}"
+      puts
+    end
+  end
   
   def create_person
     puts 'Do you want to create a student (1) or a teacher (2)? [Input the number]:'
@@ -41,7 +49,7 @@ class App
     print 'Age: '
     age = gets.chomp.to_i
     print 'Name: '
-    name = gets.chomp.to_i
+    name = gets.chomp
     print 'Parent Permission (Y/N): '
     parent_permission_input = gets.chomp.upcase
 
@@ -80,24 +88,80 @@ class App
     puts
   end
   
-  # def create_rental
+  def create_rental
+    puts 'Select a book from the following list by number:'
+    @books.each_with_index { |book, index| puts "#{index}) Title: \"#{book.title}\", Author: #{book.author}" }
+
+    book_index = gets.chomp.to_i
+
+    unless book_index.between?(0, @books.length)
+      puts 'Invalid book selection. Please try again.'
+      return
+    end
+
+    puts 'Select a person from the following list by number(not id):'
+    @people.each_with_index do |person, index|
+      person_type = person.is_a?(Student) ? 'Student' : 'Teacher'
+      puts "#{index}) [#{person_type}] Name: #{person.name}, ID: #{person.id}, Age: #{person.age}"
+    end
+
+    person_index = gets.chomp.to_i
+
+    unless person_index.between?(0, @people.length)
+      puts 'Invalid person selection. Please try again.'
+      return
+    end
+
+    print 'Date (YYYY-MM-DD): '
+    date = gets.chomp
+
+    rental = Rental.new(date, @people[person_index], @books[book_index])
+    @rentals << rental
+
+    puts 'Rental created successfully'
+    puts
+  end
   
-  # end
-  
-  # def list_of_rentals(person_id)
-  
-  # end
+  def list_of_rentals(person_id)
+    person = @people.find { |p| p.id === person_id }
+
+    if person.nil?
+      puts "Person with ID #{person_id} not found."
+      return
+    end
+
+    rentals = @rentals.select { |rental| rental.person === person }
+
+    if rentals.empty?
+      puts "No rentals found for person with ID #{person_id}."
+      return
+    end
+
+    puts "Rentals:"
+
+    rentals.each do |rental|
+      book = rental.book
+      puts "Date: #{rental.date}, Book \"#{book.title}\" by #{book.author}"
+    end
+
+    puts
+  end
   
   def handle_menu(option)
     options = {
       '1' => method(:list_of_books),
-      # '2' => method(:list_all_people),
+      '2' => method(:list_of_people),
       '3' => method(:create_person),
       '4' => method(:create_book),
-      # '5' => method(:create_rental),
-      # '6' => method(:list_of_rentals),
+      '5' => method(:create_rental),
+      '6' => proc {
+              print 'Enter the person ID: '
+              person_id = gets.chomp.to_i
+              list_of_rentals(person_id)
+            },
       '7' => proc {
               puts 'Thank you for using this app. Good Bye!'
+              puts
               exit
             }
     }
