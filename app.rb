@@ -12,14 +12,13 @@ class App
     @people = []
     @rentals = []
     puts 'Welcome to Library App!'
-    puts
   end
 
   def list_of_books
     @books.each { |book| puts "Title: '#{book.title}', Author: #{book.author}" }
     puts
   end
-  
+
   def list_of_people
     @people.each do |person|
       person_type = person.is_a?(Student) ? 'Student' : 'Teacher'
@@ -27,10 +26,9 @@ class App
       print "Name: #{person.name} "
       print "ID: #{person.id} "
       print "Age: #{person.age}"
-      puts
     end
   end
-  
+
   def create_person
     puts 'Do you want to create a student (1) or a teacher (2)? [Input the number]:'
     person_type = gets.chomp.to_i
@@ -53,12 +51,12 @@ class App
     print 'Parent Permission (Y/N): '
     parent_permission_input = gets.chomp.upcase
 
-    parent_permission = parent_permission_input == 'y' ? true : false
+    parent_permission = parent_permission_input == 'y'
 
     student = Student.new(age, name, parent_permission: parent_permission)
     @people << student
 
-    puts 'Student created sucesfully'
+    puts 'Student created successfully'
     puts
   end
 
@@ -73,7 +71,7 @@ class App
     teacher = Teacher.new(age, specialization, name)
     @people << teacher
 
-    puts 'Teacher created sucesfully'
+    puts 'Teacher created successfully'
     puts
   end
 
@@ -87,17 +85,10 @@ class App
     puts 'Book created successfully'
     puts
   end
-  
+
   def create_rental
-    puts 'Select a book from the following list by number:'
-    @books.each_with_index { |book, index| puts "#{index}) Title: \"#{book.title}\", Author: #{book.author}" }
-
-    book_index = gets.chomp.to_i
-
-    unless book_index.between?(0, @books.length)
-      puts 'Invalid book selection. Please try again.'
-      return
-    end
+    book_index = select_book
+    return unless book_index
 
     puts 'Select a person from the following list by number(not id):'
     @people.each_with_index do |person, index|
@@ -119,27 +110,38 @@ class App
     @rentals << rental
 
     puts 'Rental created successfully'
-    puts
   end
-  
+
+  def select_book
+    puts 'Select a book from the following list by number:'
+    @books.each_with_index { |book, index| puts "#{index}) Title: \"#{book.title}\", Author: #{book.author}" }
+
+    book_index = gets.chomp.to_i
+
+    return book_index if book_index.between?(0, @books.length)
+
+    puts 'Invalid book selection. Please try again.'
+    nil
+  end
+
   def list_of_rentals(person_id)
-    person = @people.find { |p| p.id === person_id }
+    person = @people.find { |p| p.id == person_id }
 
     if person.nil?
       puts "Person with ID #{person_id} not found."
       return
     end
 
-    rentals = @rentals.select { |rental| rental.person === person }
+    rentals = @rentals.select { |rental| rental.person == person }
 
     if rentals.empty?
-      puts "Rentals:"
+      puts 'Rentals:'
       puts "No rentals found for person with ID #{person_id}."
       puts
       return
     end
 
-    puts "Rentals:"
+    puts 'Rentals:'
 
     rentals.each do |rental|
       book = rental.book
@@ -148,7 +150,7 @@ class App
 
     puts
   end
-  
+
   def handle_menu(option)
     options = {
       '1' => method(:list_of_books),
@@ -157,22 +159,24 @@ class App
       '4' => method(:create_book),
       '5' => method(:create_rental),
       '6' => proc {
-              print 'Enter the person ID: '
-              person_id = gets.chomp.to_i
-              list_of_rentals(person_id)
-            },
-      '7' => proc {
-              puts 'Thank you for using this app. Good Bye!'
-              puts
-              exit
-            }
+               print 'Enter the person ID: '
+               person_id = gets.chomp.to_i
+               list_of_rentals(person_id)
+             },
+      '7' => method(:exit_app)
     }
 
-    if(options)[option]
+    if options[option]
       options[option].call
     else
       puts 'Invalid option. Please try again.'
     end
+  end
+
+  def exit_app
+    puts 'Thank you for using this app. Good Bye!'
+    puts
+    exit
   end
 
   def main
