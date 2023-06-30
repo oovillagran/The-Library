@@ -1,11 +1,10 @@
 class Student < Person
   attr_reader :classroom
 
-  def initialize(age, classroom, name = 'Unknown', parent_permission: true)
+  def initialize(age, name = 'Unknown', parent_permission: true, classroom: nil)
     super(age, name, parent_permission: parent_permission)
     @parent_permission = parent_permission
-    @classroom = classroom
-    classroom.add_student(self)
+    self.classroom = classroom if classroom
   end
 
   def play_hooky
